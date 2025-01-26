@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, Response } from "express";
 import Job from "../models/Job";
 import logger from "../config/logger";
 
@@ -110,6 +110,40 @@ export const deleteJob = async (req: Request, res: Response) => {
     res.status(500).json({
       success: false,
       message: "An error occurred while deleting the job",
+    });
+    return;
+  }
+};
+
+export const updateJob = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    const updatedJob = await Job.findByIdAndUpdate(id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!updatedJob) {
+      res.status(404).json({
+        success: false,
+        message: `Job with ID ${id} not found`,
+      });
+      return;
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Job updated successfully",
+      data: updatedJob,
+    });
+    return;
+  } catch (error) {
+    logger.error("Error updating the job:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "An error occurred while updating the job",
     });
     return;
   }
