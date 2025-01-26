@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createJob } from "../controllers/jobsControllers";
+import { createJob, getJobs } from "../controllers/jobsControllers";
 import { creatingJobValidation } from "../validation/jobsValidation";
 import { validateJob } from "../validation/validationMiddleware";
 
@@ -9,13 +9,13 @@ const router = Router();
 router.post("/", creatingJobValidation, validateJob, createJob);
 
 // GET / - Retrieve all jobs from the DB
-// router.get("/", getJobs);
+router.get("/", getJobs);
 
-// // GET /:id - Retrieve a single job by its ID
+// GET /:id - Retrieve a single job by its ID
 // router.get("/:id", getJobById);
 
-// // PUT /:id - Update a job entry by its ID
+// PUT /:id - Update a job entry by its ID
 // router.put("/:id", updateJob);
 
-// // DELETE /:id - Delete a job entry by its ID
+// DELETE /:id - Delete a job entry by its ID
 // router.delete("/:id", deleteJob);
