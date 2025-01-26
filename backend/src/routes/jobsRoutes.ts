@@ -1,5 +1,10 @@
 import { Router } from "express";
-import { createJob, getJobs } from "../controllers/jobsControllers";
+import {
+  createJob,
+  getJobs,
+  getJobById,
+  deleteJob,
+} from "../controllers/jobsControllers";
 import { creatingJobValidation } from "../validation/jobsValidation";
 import { validateJob } from "../validation/validationMiddleware";
 
@@ -12,10 +17,10 @@ router.post("/", creatingJobValidation, validateJob, createJob);
 router.get("/", getJobs);
 
 // GET /:id - Retrieve a single job by its ID
-// router.get("/:id", getJobById);
+router.get("/:id", getJobById);
 
 // PUT /:id - Update a job entry by its ID
 // router.put("/:id", updateJob);
 
 // DELETE /:id - Delete a job entry by its ID
-// router.delete("/:id", deleteJob);
+router.delete("/:id", deleteJob);
