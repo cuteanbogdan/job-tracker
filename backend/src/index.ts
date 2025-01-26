@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import { configureMiddleware } from "./config/middlewareForApp";
 import connectDB from "./config/db";
 import logger from "./config/logger";
+import jobsRoutes from "./routes/jobsRoutes";
 
 dotenv.config();
 
@@ -11,8 +12,10 @@ const app: Application = express();
 connectDB();
 configureMiddleware(app);
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Working job tracker");
+app.use("/api/v1/jobs", jobsRoutes);
+
+app.get("/test", (req: Request, res: Response) => {
+  res.send("Testing job tracker");
 });
 
 const PORT = process.env.PORT || 5000;

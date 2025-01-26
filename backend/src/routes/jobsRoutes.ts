@@ -25,3 +25,5 @@ router.put("/:id", updateJob);
 
 // DELETE /:id - Delete a job entry by its ID
 router.delete("/:id", deleteJob);
+
+export default router;
