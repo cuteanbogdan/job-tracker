@@ -1,4 +1,4 @@
-import { Request, Response, Response } from "express";
+import { Request, Response } from "express";
 import Job from "../models/Job";
 import logger from "../config/logger";
 

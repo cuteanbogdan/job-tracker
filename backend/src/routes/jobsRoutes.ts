@@ -3,6 +3,7 @@ import {
   createJob,
   getJobs,
   getJobById,
+  updateJob,
   deleteJob,
 } from "../controllers/jobsControllers";
 import { creatingJobValidation } from "../validation/jobsValidation";
@@ -20,7 +21,7 @@ router.get("/", getJobs);
 router.get("/:id", getJobById);
 
 // PUT /:id - Update a job entry by its ID
-// router.put("/:id", updateJob);
+router.put("/:id", updateJob);
 
 // DELETE /:id - Delete a job entry by its ID
 router.delete("/:id", deleteJob);
