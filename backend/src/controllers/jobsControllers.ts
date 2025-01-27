@@ -37,11 +37,18 @@ export const createJob = async (req: Request, res: Response) => {
 
 export const getJobs = async (req: Request, res: Response) => {
   try {
-    const { page = 1, limit = 10, status } = req.query;
+    const { page = 1, limit = 10, status, search } = req.query;
 
     // Build the filter object
     const filter: Record<string, any> = {};
     if (status) filter.status = status;
+
+    if (search) {
+      filter.$or = [
+        { jobTitle: { $regex: search, $options: "i" } },
+        { companyName: { $regex: search, $options: "i" } },
+      ];
+    }
 
     const pageNumber = parseInt(page as string, 10);
     const pageLimit = parseInt(limit as string, 10);
