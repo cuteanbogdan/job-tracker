@@ -10,16 +10,26 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 import AddJobModal from "@/components/JobsFunctionsModals/AddJobModal";
 import EditJobModal from "@/components/JobsFunctionsModals/EditJobModal";
 import ConfirmDeleteModal from "@/components/JobsFunctionsModals/ConfirmDeleteModal";
+import Pagination from "@/components/Pagination";
 
-const fetcher = (url: string) => axios.get(url).then((res) => res.data.data);
+const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 const JobsPage = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+
   const {
-    data: jobs,
+    data: response,
     error,
     isLoading,
     mutate,
-  } = useSWR<JobType[]>("http://localhost:5000/api/v1/jobs", fetcher);
+  } = useSWR(
+    `http://localhost:5000/api/v1/jobs?page=${currentPage}&limit=${limit}`,
+    fetcher
+  );
+
+  const jobs = response?.data || [];
+  const meta = response?.meta || { totalPages: 1, currentPage: 1 };
 
   const [isAddModalOpen, setAddModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
@@ -71,8 +81,19 @@ const JobsPage = () => {
           jobs={jobs || []}
           onEdit={openEditModal}
           onDelete={openDeleteModal}
+          currentPage={currentPage}
+          limit={limit}
+          totalJobs={meta.totalJobs}
         />
       )}
+
+      <Pagination
+        currentPage={currentPage}
+        totalPages={meta.totalPages}
+        limit={limit}
+        setCurrentPage={setCurrentPage}
+        setLimit={setLimit}
+      />
 
       {isAddModalOpen && (
         <AddJobModal onClose={closeAddModal} mutateJobs={mutate} />

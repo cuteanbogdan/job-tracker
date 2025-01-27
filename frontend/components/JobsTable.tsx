@@ -5,9 +5,19 @@ interface JobsTableProps {
   jobs: JobType[];
   onEdit: (job: JobType) => void;
   onDelete: (job: JobType) => void;
+  currentPage: number;
+  limit: number;
+  totalJobs: number;
 }
 
-const JobsTable: React.FC<JobsTableProps> = ({ jobs, onEdit, onDelete }) => {
+const JobsTable: React.FC<JobsTableProps> = ({
+  jobs,
+  onEdit,
+  onDelete,
+  currentPage,
+  limit,
+  totalJobs,
+}) => {
   return (
     <table className="min-w-full border-collapse border border-gray-300">
       <thead className="bg-gray-200">
@@ -26,7 +36,7 @@ const JobsTable: React.FC<JobsTableProps> = ({ jobs, onEdit, onDelete }) => {
         {jobs.map((job, index) => (
           <tr key={job._id} className="text-center">
             <td className="border border-gray-300 p-2">
-              {jobs.length - index}
+              {totalJobs - ((currentPage - 1) * limit + index)}
             </td>
             <td className="border border-gray-300 p-2">{job.companyName}</td>
             <td className="border border-gray-300 p-2">{job.jobTitle}</td>
