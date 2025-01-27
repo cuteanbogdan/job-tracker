@@ -35,79 +35,83 @@ const EditJobModal: React.FC<EditJobModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
-        <h2 className="text-xl font-bold mb-4">Edit Job</h2>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 transition-opacity">
+      <div className="bg-white w-full max-w-lg mx-4 sm:mx-auto p-6 rounded-lg shadow-lg transform transition-transform scale-100">
+        <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+          Edit Job
+        </h2>
         <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="companyName"
-            placeholder="Company Name"
-            className="w-full border p-2 mb-4"
-            value={jobData.companyName}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="text"
-            name="jobTitle"
-            placeholder="Job Title"
-            className="w-full border p-2 mb-4"
-            value={jobData.jobTitle}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="url"
-            name="linkJD"
-            placeholder="Job Description Link"
-            className="w-full border p-2 mb-4"
-            value={jobData.linkJD}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="text"
-            name="jobField"
-            placeholder="Job Field"
-            className="w-full border p-2 mb-4"
-            value={jobData.jobField}
-            onChange={handleChange}
-            required
-          />
-          <textarea
-            name="textJD"
-            placeholder="Job Description"
-            className="w-full border p-2 mb-4"
-            rows={4}
-            value={jobData.textJD}
-            onChange={handleChange}
-            required
-          />
-          <select
-            name="status"
-            className="w-full border p-2 mb-4"
-            value={jobData.status}
-            onChange={handleChange}
-            required
-          >
-            <option value="Applied">Applied</option>
-            <option value="Rejected">Rejected</option>
-            <option value="No response">No response</option>
-            <option value="Had Interview">Had Interview</option>
-            <option value="Had OA">Had OA</option>
-          </select>
-          <div className="flex justify-end">
+          <div className="space-y-4">
+            <input
+              type="text"
+              name="companyName"
+              placeholder="Company Name"
+              className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={jobData.companyName}
+              onChange={handleChange}
+              required
+            />
+            <input
+              type="text"
+              name="jobTitle"
+              placeholder="Job Title"
+              className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={jobData.jobTitle}
+              onChange={handleChange}
+              required
+            />
+            <input
+              type="url"
+              name="linkJD"
+              placeholder="Job Description Link"
+              className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={jobData.linkJD}
+              onChange={handleChange}
+              required
+            />
+            <input
+              type="text"
+              name="jobField"
+              placeholder="Job Field (e.g., Engineering, Marketing)"
+              className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={jobData.jobField}
+              onChange={handleChange}
+              required
+            />
+            <textarea
+              name="textJD"
+              placeholder="Job Description"
+              className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              rows={4}
+              value={jobData.textJD}
+              onChange={handleChange}
+              required
+            />
+            <select
+              name="status"
+              className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={jobData.status}
+              onChange={handleChange}
+              required
+            >
+              <option value="Applied">Applied</option>
+              <option value="Rejected">Rejected</option>
+              <option value="No response">No response</option>
+              <option value="Had Interview">Had Interview</option>
+              <option value="Had OA">Had OA</option>
+            </select>
+          </div>
+          <div className="flex justify-end mt-6 space-x-3">
             <button
               type="button"
-              className="bg-gray-300 px-4 py-2 rounded-lg mr-2"
+              className="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg shadow hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
               onClick={onClose}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="bg-blue-500 text-white px-4 py-2 rounded-lg"
+              className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
             >
               Save Changes
             </button>

@@ -24,24 +24,28 @@ const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
-        <h2 className="text-xl font-bold mb-4">Delete Job</h2>
-        <p className="mb-6">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white w-full max-w-md mx-4 sm:mx-auto p-6 rounded-lg shadow-lg transform transition-transform scale-100">
+        <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+          Confirm Deletion
+        </h2>
+        <p className="text-gray-600 text-center mb-6">
           Are you sure you want to delete the job{" "}
-          <strong>{job.jobTitle}</strong> at <strong>{job.companyName}</strong>?
+          <span className="font-semibold">{job.jobTitle}</span> at{" "}
+          <span className="font-semibold">{job.companyName}</span>? This action
+          cannot be undone.
         </p>
-        <div className="flex justify-end">
+        <div className="flex justify-between">
           <button
             type="button"
-            className="bg-gray-300 px-4 py-2 rounded-lg mr-2"
+            className="bg-gray-300 text-gray-800 px-6 py-2 rounded-lg shadow-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500"
             onClick={onClose}
           >
             Cancel
           </button>
           <button
             type="button"
-            className="bg-red-500 text-white px-4 py-2 rounded-lg"
+            className="bg-red-500 text-white px-6 py-2 rounded-lg shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400"
             onClick={handleDelete}
           >
             Delete
