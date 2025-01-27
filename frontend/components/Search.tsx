@@ -11,14 +11,13 @@ const Search: React.FC<SearchProps> = ({ search, setSearch }) => {
   };
 
   return (
-    <div className="mb-4">
-      <h2 className="text-xl font-semibold mb-2">Search</h2>
+    <div className="w-full sm:w-1/2 mb-4">
       <input
         type="text"
         placeholder="Search by title or company"
         value={search}
         onChange={handleSearchChange}
-        className="border p-2 rounded-md w-full sm:w-1/2"
+        className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none placeholder-gray-500"
       />
     </div>
   );
