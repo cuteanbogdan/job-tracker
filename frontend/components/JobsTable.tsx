@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { JobType } from "@/types/JobType";
 
 interface JobsTableProps {
@@ -78,7 +79,14 @@ const JobsTable: React.FC<JobsTableProps> = ({
                 {totalJobs - ((currentPage - 1) * limit + index)}
               </td>
               <td className="border border-gray-300 p-2">{job.companyName}</td>
-              <td className="border border-gray-300 p-2">{job.jobTitle}</td>
+              <td className="border border-gray-300 p-2">
+                <Link
+                  href={`/job/${job._id}`}
+                  className="text-blue-500 hover:underline"
+                >
+                  {job.jobTitle}
+                </Link>
+              </td>
               <td className="border border-gray-300 p-2">
                 <a
                   href={job.linkJD}
