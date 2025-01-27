@@ -12,6 +12,8 @@ import EditJobModal from "@/components/JobsFunctionsModals/EditJobModal";
 import ConfirmDeleteModal from "@/components/JobsFunctionsModals/ConfirmDeleteModal";
 import Pagination from "@/components/Pagination";
 import Filters from "@/components/Filters";
+import Search from "@/components/Search";
+import useDebounce from "@/hooks/useDebounce";
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
@@ -19,6 +21,9 @@ const JobsPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [status, setStatus] = useState("");
+  const [search, setSearch] = useState("");
+
+  const debouncedSearch = useDebounce(search, 500);
 
   const {
     data: response,
@@ -26,7 +31,7 @@ const JobsPage = () => {
     isLoading,
     mutate,
   } = useSWR(
-    `http://localhost:5000/api/v1/jobs?page=${currentPage}&limit=${limit}&status=${status}`,
+    `http://localhost:5000/api/v1/jobs?page=${currentPage}&limit=${limit}&status=${status}&search=${debouncedSearch}`,
     fetcher
   );
 
@@ -76,6 +81,7 @@ const JobsPage = () => {
           Add Job
         </button>
       </div>
+      <Search search={search} setSearch={setSearch} />
 
       <Filters status={status} setStatus={setStatus} />
 
