@@ -37,18 +37,23 @@ export const createJob = async (req: Request, res: Response) => {
 
 export const getJobs = async (req: Request, res: Response) => {
   try {
-    const page = parseInt(req.query.page as string) || 1;
-    const limit = parseInt(req.query.limit as string) || 10;
-    const skip = (page - 1) * limit;
+    const { page = 1, limit = 10, status } = req.query;
 
-    const jobs = await Job.find()
+    // Build the filter object
+    const filter: Record<string, any> = {};
+    if (status) filter.status = status;
+
+    const pageNumber = parseInt(page as string, 10);
+    const pageLimit = parseInt(limit as string, 10);
+
+    const jobs = await Job.find(filter)
       .sort({ created_at: -1 })
-      .skip(skip)
-      .limit(limit);
+      .skip((pageNumber - 1) * pageLimit)
+      .limit(pageLimit);
 
     // Get the total number of jobs for metadata
-    const totalJobs = await Job.countDocuments();
-    const totalPages = Math.ceil(totalJobs / limit);
+    const totalJobs = await Job.countDocuments(filter);
+    const totalPages = Math.ceil(totalJobs / pageLimit);
 
     res.status(200).json({
       success: true,
@@ -57,8 +62,8 @@ export const getJobs = async (req: Request, res: Response) => {
       meta: {
         totalJobs,
         totalPages,
-        currentPage: page,
-        pageSize: limit,
+        currentPage: pageNumber,
+        pageSize: pageLimit,
       },
     });
     return;
