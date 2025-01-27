@@ -11,12 +11,14 @@ import AddJobModal from "@/components/JobsFunctionsModals/AddJobModal";
 import EditJobModal from "@/components/JobsFunctionsModals/EditJobModal";
 import ConfirmDeleteModal from "@/components/JobsFunctionsModals/ConfirmDeleteModal";
 import Pagination from "@/components/Pagination";
+import Filters from "@/components/Filters";
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 const JobsPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(10);
+  const [status, setStatus] = useState("");
 
   const {
     data: response,
@@ -24,7 +26,7 @@ const JobsPage = () => {
     isLoading,
     mutate,
   } = useSWR(
-    `http://localhost:5000/api/v1/jobs?page=${currentPage}&limit=${limit}`,
+    `http://localhost:5000/api/v1/jobs?page=${currentPage}&limit=${limit}&status=${status}`,
     fetcher
   );
 
@@ -74,6 +76,9 @@ const JobsPage = () => {
           Add Job
         </button>
       </div>
+
+      <Filters status={status} setStatus={setStatus} />
+
       {jobs && jobs.length === 0 ? (
         <p>No jobs found. Add some jobs to get started!</p>
       ) : (
