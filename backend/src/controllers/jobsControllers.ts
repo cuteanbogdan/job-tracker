@@ -4,8 +4,7 @@ import logger from "../config/logger";
 
 export const createJob = async (req: Request, res: Response) => {
   try {
-    const { companyName, jobTitle, linkJD, jobField, textJD, status } =
-      req.body;
+    const { companyName, jobTitle, linkJD, jobField, textJD } = req.body;
 
     const job = new Job({
       companyName,
@@ -13,7 +12,7 @@ export const createJob = async (req: Request, res: Response) => {
       linkJD,
       jobField,
       textJD,
-      status,
+      status: "Applied",
     });
 
     const savedJob = await job.save();
