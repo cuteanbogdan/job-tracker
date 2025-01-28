@@ -13,7 +13,6 @@ const AddJobModal: React.FC<AddJobModalProps> = ({ onClose, mutateJobs }) => {
     linkJD: "",
     jobField: "",
     textJD: "",
-    status: "",
   });
 
   const handleChange = (
@@ -88,20 +87,6 @@ const AddJobModal: React.FC<AddJobModalProps> = ({ onClose, mutateJobs }) => {
               onChange={handleChange}
               required
             />
-            <select
-              name="status"
-              className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={jobData.status}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Select Status</option>
-              <option value="Applied">Applied</option>
-              <option value="Rejected">Rejected</option>
-              <option value="No response">No response</option>
-              <option value="Had Interview">Had Interview</option>
-              <option value="Had OA">Had OA</option>
-            </select>
           </div>
           <div className="flex justify-end mt-6 space-x-3">
             <button
