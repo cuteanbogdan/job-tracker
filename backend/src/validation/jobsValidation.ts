@@ -27,11 +27,6 @@ export const creatingJobValidation: ValidationChain[] = [
     .withMessage("Job description text is required")
     .isString()
     .withMessage("Job description must be a string"),
-  body("status")
-    .notEmpty()
-    .withMessage("Status is required")
-    .isIn(["Applied", "Rejected", "No response", "Had Interview", "Had OA"])
-    .withMessage("Invalid status value"),
 ];
 
 export const validateUpdateJob = (
