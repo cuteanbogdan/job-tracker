@@ -4,6 +4,7 @@ import { configureMiddleware } from "./config/middlewareForApp";
 import connectDB from "./config/db";
 import logger from "./config/logger";
 import jobsRoutes from "./routes/jobsRoutes";
+import authRoutes from "./routes/authRoutes";
 
 dotenv.config();
 
@@ -13,6 +14,7 @@ connectDB();
 configureMiddleware(app);
 
 app.use("/api/v1/jobs", jobsRoutes);
+app.use("/api/v1/auth", authRoutes);
 
 app.get("/test", (req: Request, res: Response) => {
   res.send("Testing job tracker");
