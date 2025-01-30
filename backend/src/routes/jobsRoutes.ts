@@ -6,7 +6,10 @@ import {
   updateJob,
   deleteJob,
 } from "../controllers/jobsControllers";
-import { creatingJobValidation } from "../validation/jobsValidation";
+import {
+  creatingJobValidation,
+  validateUpdateJob,
+} from "../validation/jobsValidation";
 import { validateJob } from "../validation/validationMiddleware";
 
 const router = Router();
@@ -21,7 +24,7 @@ router.get("/", getJobs);
 router.get("/:id", getJobById);
 
 // PUT /:id - Update a job entry by its ID
-router.put("/:id", updateJob);
+router.put("/:id", validateUpdateJob, updateJob);
 
 // DELETE /:id - Delete a job entry by its ID
 router.delete("/:id", deleteJob);

@@ -41,6 +41,10 @@ export const validateUpdateJob = (
     "jobField",
     "textJD",
     "status",
+    "created_at",
+    "updated_at",
+    "__v",
+    "_id",
   ];
   const updates = Object.keys(req.body);
 
