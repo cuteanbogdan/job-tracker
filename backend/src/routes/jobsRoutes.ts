@@ -10,12 +10,12 @@ import {
   creatingJobValidation,
   validateUpdateJob,
 } from "../validation/jobsValidation";
-import { validateJob } from "../validation/validationMiddleware";
+import { validateRequest } from "../validation/validationMiddleware";
 
 const router = Router();
 
 // POST / - Create a new job entry in the DB
-router.post("/", creatingJobValidation, validateJob, createJob);
+router.post("/", creatingJobValidation, validateRequest, createJob);
 
 // GET / - Retrieve all jobs from the DB
 router.get("/", getJobs);
