@@ -1,21 +1,39 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useAppDispatch from "@/hooks/useAppDispatch";
-import { loginUser } from "@/redux/slices/authSlice";
+import { loginUser, refreshToken } from "@/redux/slices/authSlice";
 import { useRouter } from "next/navigation";
+import { RootState } from "@/redux/store";
+import { useSelector } from "react-redux";
+import Link from "next/link";
 
 const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+
+  const { isAuthenticated, loading: authLoading } = useSelector(
+    (state: RootState) => state.auth
+  );
+
+  useEffect(() => {
+    if (!authLoading && !isAuthenticated) {
+      dispatch(refreshToken());
+    }
+  }, [authLoading, isAuthenticated, dispatch]);
+
+  useEffect(() => {
+    if (!authLoading && isAuthenticated) {
+      router.replace("/jobs");
+    }
+  }, [isAuthenticated, authLoading, router]);
 
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-
-  const dispatch = useAppDispatch();
-  const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -91,9 +109,9 @@ const Login = () => {
 
         <p className="text-center text-gray-600 mt-4 text-sm">
           Don't have an account?{" "}
-          <a href="/register" className="text-blue-500 hover:underline">
+          <Link href="/register" className="text-blue-500 hover:underline">
             Register here
-          </a>
+          </Link>
         </p>
       </div>
     </div>

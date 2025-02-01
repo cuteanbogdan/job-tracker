@@ -1,9 +1,13 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useAppDispatch from "@/hooks/useAppDispatch";
-import { loginUser } from "@/redux/slices/authSlice";
-import { useRouter } from "next/navigation";
+import { RootState } from "@/redux/store";
+import { loginUser, refreshToken } from "@/redux/slices/authSlice";
 import axios from "axios";
+import LoadingSpinner from "@/components/LoadingSpinner";
+import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
+import Link from "next/link";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -17,6 +21,22 @@ const Register = () => {
 
   const dispatch = useAppDispatch();
   const router = useRouter();
+
+  const { isAuthenticated, loading: authLoading } = useSelector(
+    (state: RootState) => state.auth
+  );
+
+  useEffect(() => {
+    if (!authLoading && !isAuthenticated) {
+      dispatch(refreshToken());
+    }
+  }, [authLoading, isAuthenticated, dispatch]);
+
+  useEffect(() => {
+    if (!authLoading && isAuthenticated) {
+      router.replace("/jobs");
+    }
+  }, [isAuthenticated, authLoading, router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -48,7 +68,7 @@ const Register = () => {
 
     try {
       const response = await axios.post(
-        `http://localhost:5000/api/v1/auth/register`,
+        "http://localhost:5000/api/v1/auth/register",
         {
           email: formData.email,
           password: formData.password,
@@ -74,6 +94,8 @@ const Register = () => {
       setLoading(false);
     }
   };
+
+  if (authLoading) return <LoadingSpinner />;
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -139,9 +161,9 @@ const Register = () => {
 
         <p className="text-center text-gray-600 mt-4 text-sm">
           Already have an account?{" "}
-          <a href="/login" className="text-blue-500 hover:underline">
+          <Link href="/login" className="text-blue-500 hover:underline">
             Login here
-          </a>
+          </Link>
         </p>
       </div>
     </div>
