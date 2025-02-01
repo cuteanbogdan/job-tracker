@@ -6,6 +6,7 @@ import {
   generateAccessToken,
   generateRefreshToken,
 } from "../config/passportAuth";
+import jwt from "jsonwebtoken";
 
 const isProduction = process.env.NODE_ENV === "production";
 
@@ -98,10 +99,70 @@ export const login = async (req: Request, res: Response) => {
     });
     return;
   } catch (error) {
-    logger.error("Error loggin in: ", error);
+    logger.error("Error logging in: ", error);
     res.status(500).json({
       success: false,
-      message: "An error occured while loggin in",
+      message: "An error occured while logging in",
+    });
+  }
+};
+
+export const refreshToken = (req: Request, res: Response) => {
+  try {
+    const refreshToken = req.cookies["refresh-token"];
+
+    if (!refreshToken) {
+      res.status(401).json({
+        success: false,
+        message: "Refresh token missing. Please login again",
+      });
+      return;
+    }
+
+    jwt.verify(
+      refreshToken,
+      process.env.REFRESH_TOKEN_SECRET as string,
+      async (err: any, decoded: any) => {
+        if (err) {
+          res.clearCookie("refresh-token", {
+            httpOnly: true,
+            secure: isProduction,
+            sameSite: isProduction ? "none" : "lax",
+          });
+          res.status(403).json({
+            success: false,
+            message: "Invalid refresh token. Please login again",
+          });
+          return;
+        }
+        const user = await User.findById(decoded.id);
+        if (!user) {
+          res.clearCookie("refresh-token", {
+            httpOnly: true,
+            secure: isProduction,
+            sameSite: isProduction ? "none" : "lax",
+          });
+          res.status(404).json({
+            success: false,
+            message: "User not found. Please register again.",
+          });
+          return;
+        }
+
+        const newAccessToken = generateAccessToken(user);
+
+        res.status(200).json({
+          success: true,
+          accessToken: newAccessToken,
+        });
+        return;
+      }
+    );
+  } catch (error) {
+    logger.error("Error refreshing token: ", error);
+    res.status(500).json({
+      success: false,
+      message: "An error occured while refreshing the token",
     });
     return;
   }
