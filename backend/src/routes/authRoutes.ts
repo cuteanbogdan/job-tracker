@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { register } from "../controllers/authControllers";
+import { login, register } from "../controllers/authControllers";
 import {
   registerValidation,
   loginValidation,
@@ -11,7 +11,7 @@ const router = Router();
 router.post("/register", registerValidation, validateRequest, register);
 
 // POST /login - Login user and issue tokens
-// router.post("/login", loginValidation, validateRequest, login);
+router.post("/login", loginValidation, validateRequest, login);
 
 // // POST /refresh - Refresh access token using refresh token in cookies
 // router.post("/refresh-token", refreshToken);
