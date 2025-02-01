@@ -167,3 +167,26 @@ export const refreshToken = (req: Request, res: Response) => {
     return;
   }
 };
+
+export const logout = (req: Request, res: Response) => {
+  try {
+    res.clearCookie("refresh-token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Logged out successfully",
+    });
+    return;
+  } catch (error) {
+    logger.error("Error logging out: ", error);
+    res.status(500).json({
+      success: false,
+      message: "An error occured while logging out",
+    });
+    return;
+  }
+};
