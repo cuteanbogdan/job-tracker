@@ -3,11 +3,12 @@
 import React from "react";
 import { useParams, useRouter } from "next/navigation";
 import useSWR from "swr";
-import axios from "axios";
+import axiosInstance from "@/utils/axiosInstance";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import ErrorMessage from "@/components/ErrorMessage";
 
-const fetcher = (url: string) => axios.get(url).then((res) => res.data.data);
+const fetcher = (url: string) =>
+  axiosInstance.get(url).then((res) => res.data.data);
 
 const JobDetails = () => {
   const { id } = useParams();
@@ -17,7 +18,7 @@ const JobDetails = () => {
     data: job,
     error,
     isLoading,
-  } = useSWR(id ? `http://localhost:5000/api/v1/jobs/${id}` : null, fetcher);
+  } = useSWR(id ? `/jobs/${id}` : null, fetcher);
 
   if (isLoading) return <LoadingSpinner />;
   if (error)
