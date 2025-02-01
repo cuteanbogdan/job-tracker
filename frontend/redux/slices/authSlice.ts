@@ -56,13 +56,14 @@ export const refreshToken = createAsyncThunk(
 
 export const logoutUser = createAsyncThunk(
   "auth/logout",
-  async (_, { rejectWithValue }) => {
+  async (_, { dispatch, rejectWithValue }) => {
     try {
       await axios.post(
         "http://localhost:5000/api/v1/auth/logout",
         {},
         { withCredentials: true }
       );
+      dispatch(resetAuthState());
       return null;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || "Logout failed");
