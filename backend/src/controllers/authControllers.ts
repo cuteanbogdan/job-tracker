@@ -33,20 +33,9 @@ export const register = async (req: Request, res: Response) => {
 
     await newUser.save();
 
-    const accessToken = generateAccessToken(newUser);
-    const refreshToken = generateRefreshToken(newUser);
-
-    res.cookie("refresh-token", refreshToken, {
-      httpOnly: true,
-      secure: isProduction,
-      sameSite: isProduction ? "none" : "lax",
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    });
-
     res.status(201).json({
       success: true,
       message: "User registered successfully",
-      accessToken,
     });
     return;
   } catch (error) {

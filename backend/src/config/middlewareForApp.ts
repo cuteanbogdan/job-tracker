@@ -5,7 +5,17 @@ import passport from "passport";
 import passportConfig from "./passportAuth";
 
 export const configureMiddleware = (app: Application): void => {
-  app.use(cors());
+  if (!process.env.FRONTEND_URL) {
+    throw new Error("FRONTEND_URL is not defined in the environment variables");
+  }
+
+  app.use(
+    cors({
+      origin: process.env.FRONTEND_URL,
+      credentials: true,
+      methods: ["GET", "POST", "PUT", "DELETE"],
+    })
+  );
 
   app.use(express.json());
   app.use(cookieParser());
