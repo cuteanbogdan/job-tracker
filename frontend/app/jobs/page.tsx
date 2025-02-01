@@ -65,11 +65,6 @@ const JobsPage = () => {
     setDeleteModalOpen(false);
   };
 
-  if (error)
-    return (
-      <ErrorMessage message="Failed to fetch jobs. Please try again later." />
-    );
-
   return (
     <ProtectedRoute>
       <div className="p-4 sm:p-8 bg-gray-50 min-h-screen">
@@ -89,7 +84,9 @@ const JobsPage = () => {
         </div>
 
         <div className="bg-white rounded-lg shadow-md p-4">
-          {isLoading ? (
+          {error ? (
+            <ErrorMessage message="Failed to fetch jobs. Please try again later." />
+          ) : isLoading ? (
             <LoadingSpinner />
           ) : jobs && jobs.length === 0 ? (
             <p className="text-center text-gray-500">
