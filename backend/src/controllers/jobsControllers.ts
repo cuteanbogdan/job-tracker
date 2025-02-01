@@ -1,12 +1,20 @@
 import { Request, Response } from "express";
 import Job from "../models/Job";
 import logger from "../config/logger";
+import { IUser } from "../models/User";
 
 export const createJob = async (req: Request, res: Response) => {
   try {
+    const user = req.user as IUser | undefined;
+    if (!user) {
+      res.status(401).json({ success: false, message: "Unauthorized" });
+      return;
+    }
+
     const { companyName, jobTitle, linkJD, jobField, textJD } = req.body;
 
     const job = new Job({
+      userId: user.id,
       companyName,
       jobTitle,
       linkJD,
@@ -28,7 +36,7 @@ export const createJob = async (req: Request, res: Response) => {
 
     res.status(500).json({
       success: false,
-      message: "An error occured while creating the job",
+      message: "An error occurred while creating the job",
     });
     return;
   }
@@ -36,10 +44,16 @@ export const createJob = async (req: Request, res: Response) => {
 
 export const getJobs = async (req: Request, res: Response) => {
   try {
+    const user = req.user as IUser | undefined;
+    if (!user) {
+      res.status(401).json({ success: false, message: "Unauthorized" });
+      return;
+    }
+
     const { page = 1, limit = 10, status, search } = req.query;
 
     // Build the filter object
-    const filter: Record<string, any> = {};
+    const filter: Record<string, any> = { userId: user.id };
     if (status) filter.status = status;
 
     if (search) {
@@ -86,8 +100,14 @@ export const getJobs = async (req: Request, res: Response) => {
 
 export const getJobById = async (req: Request, res: Response) => {
   try {
+    const user = req.user as IUser | undefined;
+    if (!user) {
+      res.status(401).json({ success: false, message: "Unauthorized" });
+      return;
+    }
+
     const { id } = req.params;
-    const job = await Job.findById(id);
+    const job = await Job.findOne({ _id: id, userId: user.id });
 
     if (!job) {
       res.status(404).json({
@@ -116,8 +136,17 @@ export const getJobById = async (req: Request, res: Response) => {
 
 export const deleteJob = async (req: Request, res: Response) => {
   try {
+    const user = req.user as IUser | undefined;
+    if (!user) {
+      res.status(401).json({ success: false, message: "Unauthorized" });
+      return;
+    }
+
     const { id } = req.params;
-    const deletedJob = await Job.findByIdAndDelete(id);
+    const deletedJob = await Job.findOneAndDelete({
+      _id: id,
+      userId: user.id,
+    });
 
     if (!deletedJob) {
       res.status(404).json({
@@ -145,12 +174,22 @@ export const deleteJob = async (req: Request, res: Response) => {
 
 export const updateJob = async (req: Request, res: Response) => {
   try {
+    const user = req.user as IUser | undefined;
+    if (!user) {
+      res.status(401).json({ success: false, message: "Unauthorized" });
+      return;
+    }
+
     const { id } = req.params;
 
-    const updatedJob = await Job.findByIdAndUpdate(id, req.body, {
-      new: true,
-      runValidators: true,
-    });
+    const updatedJob = await Job.findOneAndUpdate(
+      { _id: id, userId: user.id },
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
 
     if (!updatedJob) {
       res.status(404).json({

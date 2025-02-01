@@ -35,6 +35,7 @@ export const validateUpdateJob = (
   next: NextFunction
 ): void => {
   const allowedFields = [
+    "userId",
     "companyName",
     "jobTitle",
     "linkJD",
