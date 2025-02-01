@@ -32,7 +32,7 @@ const JobsPage = () => {
     isLoading,
     mutate,
   } = useSWR(
-    `http://localhost:5000/api/v1/jobs?page=${currentPage}&limit=${limit}&status=${status}&search=${debouncedSearch}`,
+    `/jobs?page=${currentPage}&limit=${limit}&status=${status}&search=${debouncedSearch}`,
     fetcher
   );
 

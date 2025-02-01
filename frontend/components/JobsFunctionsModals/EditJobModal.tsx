@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axiosInstance from "@/utils/axiosInstance";
 import { JobType } from "@/types/JobType";
 
 interface EditJobModalProps {
@@ -14,6 +14,8 @@ const EditJobModal: React.FC<EditJobModalProps> = ({
   mutateJobs,
 }) => {
   const [jobData, setJobData] = useState(job);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -25,12 +27,18 @@ const EditJobModal: React.FC<EditJobModalProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
+    setError(null);
+
     try {
-      await axios.put(`http://localhost:5000/api/v1/jobs/${job._id}`, jobData);
+      await axiosInstance.put(`/jobs/${job._id}`, jobData);
       mutateJobs();
       onClose();
     } catch (error) {
       console.error("Error updating job:", error);
+      setError("Failed to update job. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -40,6 +48,9 @@ const EditJobModal: React.FC<EditJobModalProps> = ({
         <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
           Edit Job
         </h2>
+
+        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+
         <form onSubmit={handleSubmit}>
           <div className="space-y-4">
             <input
@@ -106,14 +117,16 @@ const EditJobModal: React.FC<EditJobModalProps> = ({
               type="button"
               className="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg shadow hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
               onClick={onClose}
+              disabled={loading}
             >
               Cancel
             </button>
             <button
               type="submit"
               className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              disabled={loading}
             >
-              Save Changes
+              {loading ? "Saving..." : "Save Changes"}
             </button>
           </div>
         </form>

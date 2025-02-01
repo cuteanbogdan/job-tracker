@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axiosInstance from "@/utils/axiosInstance"; // Use the axios instance
 
 interface AddJobModalProps {
   onClose: () => void;
@@ -15,6 +15,9 @@ const AddJobModal: React.FC<AddJobModalProps> = ({ onClose, mutateJobs }) => {
     textJD: "",
   });
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
@@ -25,12 +28,18 @@ const AddJobModal: React.FC<AddJobModalProps> = ({ onClose, mutateJobs }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
+    setError(null);
+
     try {
-      await axios.post("http://localhost:5000/api/v1/jobs", jobData);
+      await axiosInstance.post("/jobs", jobData);
       mutateJobs();
       onClose();
     } catch (error) {
       console.error("Error adding job:", error);
+      setError("Failed to add job. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -40,6 +49,9 @@ const AddJobModal: React.FC<AddJobModalProps> = ({ onClose, mutateJobs }) => {
         <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
           Add Job
         </h2>
+
+        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+
         <form onSubmit={handleSubmit}>
           <div className="space-y-4">
             <input
@@ -93,14 +105,16 @@ const AddJobModal: React.FC<AddJobModalProps> = ({ onClose, mutateJobs }) => {
               type="button"
               className="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg shadow hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
               onClick={onClose}
+              disabled={loading}
             >
               Cancel
             </button>
             <button
               type="submit"
               className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              disabled={loading}
             >
-              Add Job
+              {loading ? "Adding..." : "Add Job"}
             </button>
           </div>
         </form>
