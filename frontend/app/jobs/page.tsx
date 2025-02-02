@@ -18,6 +18,7 @@ import useDebounce from "@/hooks/useDebounce";
 import axiosInstance from "@/utils/axiosInstance";
 import ProtectedRoute from "@/components/shared/ProtectedRoute";
 import { logoutUser } from "@/redux/slices/authSlice";
+import BulkUpdateModal from "@/components/jobsComponents/JobsFunctionsModals/BulkUpdateModal";
 
 const fetcher = (url: string) => axiosInstance.get(url).then((res) => res.data);
 
@@ -26,6 +27,7 @@ const JobsPage = () => {
   const [limit, setLimit] = useState(50);
   const [status, setStatus] = useState("");
   const [search, setSearch] = useState("");
+  const [dateFilter, setDateFilter] = useState("");
 
   const debouncedSearch = useDebounce(search, 500);
 
@@ -35,7 +37,7 @@ const JobsPage = () => {
     isLoading,
     mutate,
   } = useSWR(
-    `/jobs?page=${currentPage}&limit=${limit}&status=${status}&search=${debouncedSearch}`,
+    `/jobs?page=${currentPage}&limit=${limit}&status=${status}&search=${debouncedSearch}&dateFilter=${dateFilter}`,
     fetcher
   );
 
@@ -49,6 +51,8 @@ const JobsPage = () => {
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedJob, setSelectedJob] = useState<JobType | null>(null);
+  const [selectedJobs, setSelectedJobs] = useState<string[]>([]);
+  const [isBulkUpdateModalOpen, setBulkUpdateModalOpen] = useState(false);
 
   const openAddModal = () => setAddModalOpen(true);
   const closeAddModal = () => setAddModalOpen(false);
@@ -70,6 +74,15 @@ const JobsPage = () => {
     setSelectedJob(null);
     setDeleteModalOpen(false);
   };
+
+  const openBulkUpdateModal = () => {
+    if (selectedJobs.length === 0) {
+      alert("Please select at least one job.");
+      return;
+    }
+    setBulkUpdateModalOpen(true);
+  };
+  const closeBulkUpdateModal = () => setBulkUpdateModalOpen(false);
 
   const handleLogout = () => {
     dispatch(logoutUser());
@@ -104,8 +117,52 @@ const JobsPage = () => {
         </div>
 
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
-          <Search search={search} setSearch={setSearch} />
-          <Filters status={status} setStatus={setStatus} />
+          <div className="flex-1">
+            <Search search={search} setSearch={setSearch} />
+          </div>
+
+          <div className="flex items-center space-x-4">
+            <Filters status={status} setStatus={setStatus} />
+
+            <div className="flex items-center space-x-2 mb-3">
+              <button
+                onClick={() => openBulkUpdateModal()}
+                className={`px-4 py-3 rounded-lg text-sm font-medium ${
+                  selectedJobs.length > 0
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-200"
+                }`}
+                disabled={selectedJobs.length === 0}
+              >
+                Bulk Update Status
+              </button>
+
+              <button
+                onClick={() => {
+                  const pastDate = new Date();
+                  pastDate.setDate(pastDate.getDate() - 30);
+                  setDateFilter(pastDate.toISOString());
+                }}
+                className={`px-4 py-3 rounded-lg text-sm font-medium ${
+                  dateFilter !== "" ? "bg-blue-500 text-white" : "bg-gray-200"
+                }`}
+              >
+                Older of 30 Days
+              </button>
+              <button
+                onClick={() => {
+                  setDateFilter("");
+                  setStatus("");
+                  setSearch("");
+                  setLimit(50);
+                  setSelectedJobs([]);
+                }}
+                className={`px-6 py-3 rounded-lg text-sm font-medium bg-gray-200`}
+              >
+                Reset filters
+              </button>
+            </div>
+          </div>
         </div>
 
         <div className="bg-white rounded-lg shadow-md p-4">
@@ -124,6 +181,8 @@ const JobsPage = () => {
               onDelete={openDeleteModal}
               currentPage={currentPage}
               limit={limit}
+              selectedJobs={selectedJobs}
+              setSelectedJobs={setSelectedJobs}
               totalJobs={meta.totalJobs}
             />
           )}
@@ -136,6 +195,7 @@ const JobsPage = () => {
             limit={limit}
             setCurrentPage={setCurrentPage}
             setLimit={setLimit}
+            setSelectedJobs={setSelectedJobs}
           />
         </div>
 
@@ -153,6 +213,14 @@ const JobsPage = () => {
           <ConfirmDeleteModal
             job={selectedJob}
             onClose={closeDeleteModal}
+            mutateJobs={mutate}
+          />
+        )}
+        {isBulkUpdateModalOpen && (
+          <BulkUpdateModal
+            selectedJobs={selectedJobs}
+            setSelectedJobs={setSelectedJobs}
+            onClose={closeBulkUpdateModal}
             mutateJobs={mutate}
           />
         )}

@@ -6,6 +6,8 @@ interface JobsTableProps {
   jobs: JobType[];
   onEdit: (job: JobType) => void;
   onDelete: (job: JobType) => void;
+  selectedJobs: string[];
+  setSelectedJobs: (jobs: string[]) => void;
   currentPage: number;
   limit: number;
   totalJobs: number;
@@ -15,6 +17,8 @@ const JobsTable: React.FC<JobsTableProps> = ({
   jobs,
   onEdit,
   onDelete,
+  selectedJobs,
+  setSelectedJobs,
   currentPage,
   limit,
   totalJobs,
@@ -36,11 +40,34 @@ const JobsTable: React.FC<JobsTableProps> = ({
     }
   };
 
+  const toggleSelect = (jobId: string) => {
+    setSelectedJobs(
+      selectedJobs.includes(jobId)
+        ? selectedJobs.filter((id) => id !== jobId)
+        : [...selectedJobs, jobId]
+    );
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedJobs.length === jobs.length) {
+      setSelectedJobs([]);
+    } else {
+      setSelectedJobs(jobs.map((job) => job._id));
+    }
+  };
+
   return (
     <div className="overflow-y-auto h-[65vh] border border-gray-300 rounded-lg shadow-md">
       <table className="min-w-full border-collapse">
         <thead className="bg-gray-200">
           <tr>
+            <th className="border border-gray-300 p-2 text-left font-medium text-gray-600">
+              <input
+                type="checkbox"
+                checked={selectedJobs.length === jobs.length && jobs.length > 0}
+                onChange={toggleSelectAll}
+              />
+            </th>
             <th className="border border-gray-300 p-2 text-left font-medium text-gray-600">
               Nr.
             </th>
@@ -75,6 +102,13 @@ const JobsTable: React.FC<JobsTableProps> = ({
                 index % 2 === 0 ? "bg-white" : "bg-gray-50"
               }`}
             >
+              <td className="border border-gray-300 p-2">
+                <input
+                  type="checkbox"
+                  checked={selectedJobs.includes(job._id)}
+                  onChange={() => toggleSelect(job._id)}
+                />
+              </td>
               <td className="border border-gray-300 p-2">
                 {totalJobs - ((currentPage - 1) * limit + index)}
               </td>

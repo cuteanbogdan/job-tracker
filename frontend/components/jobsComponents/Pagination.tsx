@@ -6,6 +6,7 @@ interface PaginationProps {
   limit: number;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   setLimit: React.Dispatch<React.SetStateAction<number>>;
+  setSelectedJobs: (jobs: string[]) => void;
 }
 
 const Pagination: React.FC<PaginationProps> = ({
@@ -14,16 +15,19 @@ const Pagination: React.FC<PaginationProps> = ({
   limit,
   setCurrentPage,
   setLimit,
+  setSelectedJobs,
 }) => {
   const handleNextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage((prev) => prev + 1);
+      setSelectedJobs([]);
     }
   };
 
   const handlePreviousPage = () => {
     if (currentPage > 1) {
       setCurrentPage((prev) => prev - 1);
+      setSelectedJobs([]);
     }
   };
 
