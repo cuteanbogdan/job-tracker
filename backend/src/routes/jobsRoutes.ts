@@ -6,6 +6,7 @@ import {
   updateJob,
   deleteJob,
   getJobStats,
+  updateJobStatuses,
 } from "../controllers/jobsControllers";
 import {
   creatingJobValidation,
@@ -30,6 +31,9 @@ router.get("/", authenticateJWT, getJobs);
 
 // GET /stats - Get Job Stats for Dashboard
 router.get("/stats", authenticateJWT, getJobStats);
+
+// PATCH /bulk-update - Update job statuses in bulk
+router.patch("/bulk-update", authenticateJWT, updateJobStatuses);
 
 // GET /:id - Retrieve a single job by its ID
 router.get("/:id", authenticateJWT, getJobById);

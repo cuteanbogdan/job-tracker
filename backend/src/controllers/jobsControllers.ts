@@ -51,11 +51,14 @@ export const getJobs = async (req: Request, res: Response) => {
       return;
     }
 
-    const { page = 1, limit = 10, status, search } = req.query;
-
+    const { page = 1, limit = 10, status, search, dateFilter } = req.query;
     // Build the filter object
     const filter: Record<string, any> = { userId: user.id };
     if (status) filter.status = status;
+
+    if (dateFilter) {
+      filter.created_at = { $lte: new Date(dateFilter as string) };
+    }
 
     if (search) {
       filter.$or = [
@@ -273,12 +276,59 @@ export const getJobStats = async (req: Request, res: Response) => {
         monthlyApplications,
       },
     });
+    return;
   } catch (error) {
     logger.error("Error fetching job stats: ", error);
 
     res.status(500).json({
       success: false,
       message: "An error occurred while retrieving job stats",
+    });
+    return;
+  }
+};
+
+export const updateJobStatuses = async (req: Request, res: Response) => {
+  try {
+    const user = req.user as IUser | undefined;
+    if (!user) {
+      res.status(401).json({ success: false, message: "Unauthorized" });
+      return;
+    }
+
+    const { jobIds, newStatus } = req.body;
+
+    if (!Array.isArray(jobIds) || jobIds.length === 0) {
+      res
+        .status(400)
+        .json({ success: false, message: "Invalid job IDs provided" });
+      return;
+    }
+
+    if (!newStatus) {
+      res
+        .status(400)
+        .json({ success: false, message: "New status is required" });
+      return;
+    }
+
+    const result = await Job.updateMany(
+      { _id: { $in: jobIds }, userId: user.id },
+      { $set: { status: newStatus } }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Jobs updated successfully",
+      modifiedCount: result.modifiedCount,
+    });
+    return;
+  } catch (error) {
+    logger.error("Error updating job statuses:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "An error occurred while updating job statuses",
     });
     return;
   }
