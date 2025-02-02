@@ -35,17 +35,12 @@ export const validateUpdateJob = (
   next: NextFunction
 ): void => {
   const allowedFields = [
-    "userId",
     "companyName",
     "jobTitle",
     "linkJD",
     "jobField",
     "textJD",
     "status",
-    "created_at",
-    "updated_at",
-    "__v",
-    "_id",
   ];
   const updates = Object.keys(req.body);
 

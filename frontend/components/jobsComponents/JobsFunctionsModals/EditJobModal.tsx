@@ -13,7 +13,14 @@ const EditJobModal: React.FC<EditJobModalProps> = ({
   onClose,
   mutateJobs,
 }) => {
-  const [jobData, setJobData] = useState(job);
+  const [jobData, setJobData] = useState({
+    companyName: job.companyName || "",
+    jobTitle: job.jobTitle || "",
+    linkJD: job.linkJD || "",
+    jobField: job.jobField || "",
+    textJD: job.textJD || "",
+    status: job.status || "Applied",
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
