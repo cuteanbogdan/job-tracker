@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axiosInstance from "@/utils/axiosInstance"; // Use the axios instance
+import axiosInstance from "@/utils/axiosInstance";
 
 interface AddJobModalProps {
   onClose: () => void;

@@ -3,18 +3,18 @@
 import React, { useState } from "react";
 import useSWR from "swr";
 import { JobType } from "@/types/JobType";
-import JobsTable from "@/components/JobsTable";
-import ErrorMessage from "@/components/ErrorMessage";
-import LoadingSpinner from "@/components/LoadingSpinner";
-import AddJobModal from "@/components/JobsFunctionsModals/AddJobModal";
-import EditJobModal from "@/components/JobsFunctionsModals/EditJobModal";
-import ConfirmDeleteModal from "@/components/JobsFunctionsModals/ConfirmDeleteModal";
-import Pagination from "@/components/Pagination";
-import Filters from "@/components/Filters";
-import Search from "@/components/Search";
+import JobsTable from "@/components/jobsComponents/JobsTable";
+import ErrorMessage from "@/components/shared/ErrorMessage";
+import LoadingSpinner from "@/components/shared/LoadingSpinner";
+import AddJobModal from "@/components/jobsComponents/JobsFunctionsModals/AddJobModal";
+import EditJobModal from "@/components/jobsComponents/JobsFunctionsModals/EditJobModal";
+import ConfirmDeleteModal from "@/components/jobsComponents/JobsFunctionsModals/ConfirmDeleteModal";
+import Pagination from "@/components/jobsComponents/Pagination";
+import Filters from "@/components/jobsComponents/Filters";
+import Search from "@/components/jobsComponents/Search";
 import useDebounce from "@/hooks/useDebounce";
 import axiosInstance from "@/utils/axiosInstance";
-import ProtectedRoute from "@/components/ProtectedRoute";
+import ProtectedRoute from "@/components/shared/ProtectedRoute";
 
 const fetcher = (url: string) => axiosInstance.get(url).then((res) => res.data);
 

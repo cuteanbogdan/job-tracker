@@ -4,9 +4,9 @@ import React from "react";
 import { useParams, useRouter } from "next/navigation";
 import useSWR from "swr";
 import axiosInstance from "@/utils/axiosInstance";
-import LoadingSpinner from "@/components/LoadingSpinner";
-import ErrorMessage from "@/components/ErrorMessage";
-import ProtectedRoute from "@/components/ProtectedRoute";
+import LoadingSpinner from "@/components/shared/LoadingSpinner";
+import ErrorMessage from "@/components/shared/ErrorMessage";
+import ProtectedRoute from "@/components/shared/ProtectedRoute";
 
 const fetcher = (url: string) =>
   axiosInstance.get(url).then((res) => res.data.data);
