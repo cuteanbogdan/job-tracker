@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import Job from "../models/Job";
 import logger from "../config/logger";
 import { IUser } from "../models/User";
+import mongoose from "mongoose";
 
 export const createJob = async (req: Request, res: Response) => {
   try {
@@ -211,6 +212,73 @@ export const updateJob = async (req: Request, res: Response) => {
     res.status(500).json({
       success: false,
       message: "An error occurred while updating the job",
+    });
+    return;
+  }
+};
+
+export const getJobStats = async (req: Request, res: Response) => {
+  try {
+    const user = req.user as IUser | undefined;
+    if (!user) {
+      res.status(401).json({ success: false, message: "Unauthorized" });
+      return;
+    }
+
+    const totalJobs = await Job.countDocuments({ userId: user.id });
+    const totalApplied = await Job.countDocuments({
+      userId: user.id,
+      status: "Applied",
+    });
+    const totalRejected = await Job.countDocuments({
+      userId: user.id,
+      status: "Rejected",
+    });
+    const totalNoResponse = await Job.countDocuments({
+      userId: user.id,
+      status: "No response",
+    });
+    const totalInterviewsOrOAs = await Job.countDocuments({
+      userId: user.id,
+      status: { $in: ["Had Interview", "Had OA"] },
+    });
+
+    const monthlyApplications = await Job.aggregate([
+      {
+        $match: {
+          userId: new mongoose.Types.ObjectId(String(user.id)),
+        },
+      },
+      {
+        $group: {
+          _id: {
+            year: { $year: "$created_at" },
+            month: { $month: "$created_at" },
+          },
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { "_id.year": 1, "_id.month": 1 } },
+    ]);
+
+    res.status(200).json({
+      success: true,
+      message: "Jobs stats retrieved successfully",
+      data: {
+        totalJobs,
+        totalApplied,
+        totalRejected,
+        totalNoResponse,
+        totalInterviewsOrOAs,
+        monthlyApplications,
+      },
+    });
+  } catch (error) {
+    logger.error("Error fetching job stats: ", error);
+
+    res.status(500).json({
+      success: false,
+      message: "An error occurred while retrieving job stats",
     });
     return;
   }

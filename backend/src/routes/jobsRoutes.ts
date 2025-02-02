@@ -5,6 +5,7 @@ import {
   getJobById,
   updateJob,
   deleteJob,
+  getJobStats,
 } from "../controllers/jobsControllers";
 import {
   creatingJobValidation,
@@ -26,6 +27,9 @@ router.post(
 
 // GET / - Retrieve all jobs from the DB
 router.get("/", authenticateJWT, getJobs);
+
+// GET /stats - Get Job Stats for Dashboard
+router.get("/stats", authenticateJWT, getJobStats);
 
 // GET /:id - Retrieve a single job by its ID
 router.get("/:id", authenticateJWT, getJobById);
