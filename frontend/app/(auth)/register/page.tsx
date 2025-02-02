@@ -4,7 +4,7 @@ import useAppDispatch from "@/hooks/useAppDispatch";
 import { RootState } from "@/redux/store";
 import { loginUser, refreshToken } from "@/redux/slices/authSlice";
 import axios from "axios";
-import LoadingSpinner from "@/components/LoadingSpinner";
+import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import Link from "next/link";
@@ -34,7 +34,7 @@ const Register = () => {
 
   useEffect(() => {
     if (!authLoading && isAuthenticated) {
-      router.replace("/jobs");
+      router.replace("/");
     }
   }, [isAuthenticated, authLoading, router]);
 
@@ -82,7 +82,7 @@ const Register = () => {
         );
 
         if (loginUser.fulfilled.match(resultAction)) {
-          router.push("/jobs");
+          router.push("/");
         } else {
           setError("Registration succeeded, but login failed.");
         }

@@ -28,7 +28,7 @@ const Login = () => {
 
   useEffect(() => {
     if (!authLoading && isAuthenticated) {
-      router.replace("/jobs");
+      router.replace("/");
     }
   }, [isAuthenticated, authLoading, router]);
 
@@ -48,7 +48,7 @@ const Login = () => {
       const resultAction = await dispatch(loginUser(formData));
 
       if (loginUser.fulfilled.match(resultAction)) {
-        router.push("/jobs");
+        router.push("/");
       } else {
         setError("Invalid email or password.");
       }
