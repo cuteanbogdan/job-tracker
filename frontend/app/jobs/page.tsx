@@ -127,7 +127,7 @@ const JobsPage = () => {
             <div className="flex items-center space-x-2 mb-3">
               <button
                 onClick={() => openBulkUpdateModal()}
-                className={`px-4 py-3 rounded-lg text-sm font-medium ${
+                className={`px-4 py-2 rounded-lg text-sm font-medium ${
                   selectedJobs.length > 0
                     ? "bg-blue-500 text-white"
                     : "bg-gray-200"
@@ -143,7 +143,7 @@ const JobsPage = () => {
                   pastDate.setDate(pastDate.getDate() - 30);
                   setDateFilter(pastDate.toISOString());
                 }}
-                className={`px-4 py-3 rounded-lg text-sm font-medium ${
+                className={`px-4 py-2 rounded-lg text-sm font-medium ${
                   dateFilter !== "" ? "bg-blue-500 text-white" : "bg-gray-200"
                 }`}
               >
@@ -157,7 +157,7 @@ const JobsPage = () => {
                   setLimit(50);
                   setSelectedJobs([]);
                 }}
-                className={`px-6 py-3 rounded-lg text-sm font-medium bg-gray-200`}
+                className={`px-6 py-2 rounded-lg text-sm font-medium bg-gray-200`}
               >
                 Reset filters
               </button>
