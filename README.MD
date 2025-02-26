@@ -39,15 +39,15 @@ It provides **authentication, job management features (CRUD), filtering, search,
 
 ### **Dashboard Page:**
 
-Displays job application metrics and statistics.
+![Displays job application metrics and statistics.](https://raw.githubusercontent.com/cuteanbogdan/job-tracker/refs/heads/master/DashboardPage.PNG)
 
 ### **Job List Page:**
 
-Shows all job applications with pagination, filtering, and search options.
+![Shows all job applications with pagination, filtering, and search options.](https://raw.githubusercontent.com/cuteanbogdan/job-tracker/refs/heads/master/JobListingPage.PNG)
 
 ### **Individual Job Page:**
 
-Provides a detailed view of a specific job entry.
+![Provides a detailed view of a specific job entry.](https://raw.githubusercontent.com/cuteanbogdan/job-tracker/refs/heads/master/IndividualJobPage.PNG)
 
 ---
 
