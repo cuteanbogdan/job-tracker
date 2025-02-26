@@ -33,15 +33,19 @@ const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white w-full max-w-md mx-4 sm:mx-auto p-6 rounded-lg shadow-lg transform transition-transform scale-100">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 transition-opacity">
+      <div className="bg-white dark:bg-gray-800 dark:text-white w-full max-w-md mx-4 sm:mx-auto p-6 rounded-lg shadow-lg transform transition-transform scale-100">
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-6 text-center">
           Confirm Deletion
         </h2>
 
-        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+        {error && (
+          <p className="text-red-500 dark:text-red-400 text-center mb-4">
+            {error}
+          </p>
+        )}
 
-        <p className="text-gray-600 text-center mb-6">
+        <p className="text-gray-600 dark:text-gray-300 text-center mb-6">
           Are you sure you want to delete the job{" "}
           <span className="font-semibold">{job.jobTitle}</span> at{" "}
           <span className="font-semibold">{job.companyName}</span>? This action
@@ -51,7 +55,7 @@ const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
         <div className="flex justify-between">
           <button
             type="button"
-            className="bg-gray-300 text-gray-800 px-6 py-2 rounded-lg shadow-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500"
+            className="bg-gray-300 dark:bg-gray-700 dark:text-white text-gray-800 px-6 py-2 rounded-lg shadow-md hover:bg-gray-400 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
             onClick={onClose}
             disabled={loading}
           >
@@ -59,7 +63,7 @@ const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
           </button>
           <button
             type="button"
-            className="bg-red-500 text-white px-6 py-2 rounded-lg shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400"
+            className="bg-red-500 dark:bg-red-700 dark:hover:bg-red-600 text-white px-6 py-2 rounded-lg shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400"
             onClick={handleDelete}
             disabled={loading}
           >
