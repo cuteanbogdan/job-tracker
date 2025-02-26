@@ -19,6 +19,7 @@ import axiosInstance from "@/utils/axiosInstance";
 import ProtectedRoute from "@/components/shared/ProtectedRoute";
 import { logoutUser } from "@/redux/slices/authSlice";
 import BulkUpdateModal from "@/components/jobsComponents/JobsFunctionsModals/BulkUpdateModal";
+import useTheme from "@/hooks/useTheme";
 
 const fetcher = (url: string) => axiosInstance.get(url).then((res) => res.data);
 
@@ -46,6 +47,7 @@ const JobsPage = () => {
 
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const { theme, toggleTheme } = useTheme();
 
   const [isAddModalOpen, setAddModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
@@ -91,9 +93,11 @@ const JobsPage = () => {
 
   return (
     <ProtectedRoute>
-      <div className="p-4 sm:p-8 bg-gray-50 min-h-screen">
+      <div className="p-4 sm:p-8 bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
-          <h1 className="text-3xl font-bold text-gray-800">Job Listings</h1>
+          <h1 className="text-3xl font-bold text-gray-800 dark:text-white">
+            Job Listings
+          </h1>
           <div className="flex gap-4">
             <button
               className="bg-green-500 text-white px-6 py-2 rounded-lg shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400"
@@ -112,6 +116,12 @@ const JobsPage = () => {
               onClick={handleLogout}
             >
               Logout
+            </button>
+            <button
+              className="bg-gray-800 text-white px-6 py-2 rounded-lg shadow-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
+              onClick={toggleTheme}
+            >
+              {theme === "dark" ? "☀" : "🌙"}
             </button>
           </div>
         </div>
@@ -165,13 +175,13 @@ const JobsPage = () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-4">
+        <div className="bg-white dark:bg-gray-800 dark:text-white rounded-lg shadow-md p-4 transition-colors">
           {error ? (
             <ErrorMessage message="Failed to fetch jobs. Please try again later." />
           ) : isLoading ? (
             <LoadingSpinner />
           ) : jobs.length === 0 ? (
-            <p className="text-center text-gray-500">
+            <p className="text-center text-gray-500 dark:text-gray-300">
               No jobs found. Add some jobs to get started!
             </p>
           ) : (
