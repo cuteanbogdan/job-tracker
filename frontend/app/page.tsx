@@ -27,18 +27,20 @@ const Dashboard = () => {
 
   return (
     <ProtectedRoute>
-      <div className="p-4 sm:p-8 bg-gray-50 min-h-screen">
+      <div className="p-4 sm:p-8 bg-gray-50 dark:bg-gray-900 dark:text-white min-h-screen transition-colors">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
-          <h1 className="text-3xl font-bold text-gray-800">Dashboard</h1>
+          <h1 className="text-3xl font-bold text-gray-800 dark:text-white">
+            Dashboard
+          </h1>
           <div className="flex gap-4">
             <button
-              className="bg-blue-500 text-white px-6 py-2 rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="bg-blue-500 dark:bg-blue-700 dark:hover:bg-blue-600 text-white px-6 py-2 rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
               onClick={() => router.push("/jobs")}
             >
               View Jobs
             </button>
             <button
-              className="bg-red-500 text-white px-6 py-2 rounded-lg shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400"
+              className="bg-red-500 dark:bg-red-700 dark:hover:bg-red-600 text-white px-6 py-2 rounded-lg shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400"
               onClick={handleLogout}
             >
               Logout

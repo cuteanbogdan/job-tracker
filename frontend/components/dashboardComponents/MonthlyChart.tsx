@@ -32,6 +32,8 @@ const MonthlyChart: React.FC<MonthlyChartProps> = ({ data }) => {
         label: "Applications per Month",
         data: safeData.map((entry) => entry.count || 0),
         backgroundColor: "rgba(54, 162, 235, 0.6)",
+        borderColor: "rgba(54, 162, 235, 1)",
+        borderWidth: 1,
       },
     ],
   };
@@ -42,19 +44,34 @@ const MonthlyChart: React.FC<MonthlyChartProps> = ({ data }) => {
     scales: {
       y: {
         beginAtZero: true,
+        ticks: {
+          color: "#6b7280",
+        },
+      },
+      x: {
+        ticks: {
+          color: "#6b7280",
+        },
+      },
+    },
+    plugins: {
+      legend: {
+        labels: {
+          color: "#6b7280",
+        },
       },
     },
   };
 
   return (
-    <div className="bg-white p-4 rounded-lg shadow-md h-[70vh]">
+    <div className="bg-white dark:bg-gray-800 dark:text-white p-4 rounded-lg shadow-md h-[70vh] transition-colors">
       <h2 className="text-lg font-semibold mb-2">Applications Over Time</h2>
       {safeData.length > 0 ? (
         <div className="h-full">
           <Bar data={chartData} options={chartOptions} />
         </div>
       ) : (
-        <p className="text-gray-500 text-center">
+        <p className="text-gray-500 dark:text-gray-300 text-center">
           No application data available
         </p>
       )}

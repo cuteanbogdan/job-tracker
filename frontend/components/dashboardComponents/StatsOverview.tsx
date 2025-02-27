@@ -3,7 +3,9 @@ import { StatsData, StatCardProps } from "@/types/DashboardTypes";
 
 const StatCard: React.FC<StatCardProps> = ({ title, value, color }) => {
   return (
-    <div className={`bg-${color}-100 p-4 rounded-lg shadow-md`}>
+    <div
+      className={`bg-${color}-100 dark:bg-gray-800 dark:text-white p-4 rounded-lg shadow-md transition-colors`}
+    >
       <h3 className="text-lg font-semibold">{title}</h3>
       <p className="text-2xl font-bold">{value}</p>
     </div>
